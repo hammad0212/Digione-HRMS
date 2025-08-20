@@ -7,10 +7,10 @@ const Index = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
+        {/* <AppSidebar /> */}
         
         <div className="flex-1 flex flex-col">
-          <Header />
+          {/* <Header /> */}
           
           <main className="flex-1 p-6 space-y-6">
             <div className="space-y-2">

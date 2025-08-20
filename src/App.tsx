@@ -9,27 +9,67 @@ import NotFound from "./pages/NotFound";
 import Job from "./pages/recruitment/Job";
 import Candidate from "./pages/recruitment/Candidate";
 import Termination from "./pages/recruitment/Termination";
+import Layout from "./components/layout/Layout";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/recruitment/job" element={<Job />} />
-            <Route path="/recruitment/candidate" element={<Candidate />} />
-            <Route path="/recruitment/termination" element={<Termination />} />
-          <Route path="/payroll" element={<PayrollTypeSetup />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Wrap all dashboard pages inside Layout */}
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <Index />
+                </Layout>
+              }
+            />
+            <Route
+              path="/payroll"
+              element={
+                <Layout>
+                  <PayrollTypeSetup />
+                </Layout>
+              }
+            />
+            <Route
+              path="/recruitment/job"
+              element={
+                <Layout>
+                  <Job />
+                </Layout>
+              }
+            />
+            <Route
+              path="/recruitment/candidate"
+              element={
+                <Layout>
+                  <Candidate />
+                </Layout>
+              }
+            />
+            <Route
+              path="/recruitment/termination"
+              element={
+                <Layout>
+                  <Termination />
+                </Layout>
+              }
+            />
+
+            {/* Fallback route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
