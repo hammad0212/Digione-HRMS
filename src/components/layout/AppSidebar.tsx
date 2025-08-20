@@ -137,7 +137,11 @@ export function AppSidebar() {
                             getNavCls({ isActive: hasActiveSubmenu }),
                             "cursor-pointer"
                           )}
-                          onClick={() => !collapsed && toggleExpanded(item.title)}
+                          onClick={() => {
+                            if (!collapsed) {
+                              toggleExpanded(item.title)
+                            }
+                          }}
                         >
                           <item.icon className="h-5 w-5 flex-shrink-0" />
                           {!collapsed && (
@@ -186,3 +190,4 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
+export default AppSidebar
