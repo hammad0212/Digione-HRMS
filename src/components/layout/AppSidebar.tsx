@@ -66,7 +66,7 @@ export function AppSidebar() {
   const location = useLocation()
   const currentPath = location.pathname
   const collapsed = state === "collapsed"
-  const [expandedItems, setExpandedItems] = useState<string[]>(['Recruitment'])
+  const [expandedItems, setExpandedItems] = useState<string[]>([])
 
   const isActive = (path: string) => currentPath === path
   const isSubmenuActive = (subItems: any[]) => subItems.some(item => currentPath === item.url)
