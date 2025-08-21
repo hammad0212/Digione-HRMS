@@ -36,17 +36,18 @@ import {
   Mail,
   Eye,
   ArrowLeft,
+  Edit3,
+  Share2,
 } from "lucide-react";
+import CreateJobModal from "./CreateJobModal";
 
 const Job = () => {
   const [activeTab, setActiveTab] = useState("open");
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<any>(null);
   const [applicationStatus, setApplicationStatus] = useState("pending");
+const [isModalOpen, setIsModalOpen] = useState(false);
 
-  /** -----------------------
-   * DUMMY DATA
-   * ---------------------- */
   const jobPosts = [
     {
       id: 1,
@@ -140,15 +141,20 @@ const Job = () => {
       organizer: "HR 3",
     },
   ];
+const handleOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  setIsModalOpen(true);
+};
+
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+};
 
   return (
-    <div className="p-6 space-y-6">
-      {/* -------------------------
-        HEADER SECTION
-      ------------------------- */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        {/* Job Tabs */}
-        <div className="flex gap-4">
+    <div className="p-4 md:p-6 space-y-6 overflow-y-hidden">
+      {/* HEADER: Tabs + Filters */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-wrap gap-2">
           {["open", "close", "offer"].map((tab) => (
             <Button
               key={tab}
@@ -166,27 +172,23 @@ const Job = () => {
           ))}
         </div>
 
-        {/* Create + Filters */}
-        <div className="flex flex-wrap gap-4">
-          <Button className="bg-cyan-500 hover:bg-cyan-600 text-white">
-            <Plus className="mr-2 w-4 h-4" /> CREATE JOB POST
+        <div className="flex flex-wrap gap-2 w-full md:w-auto">
+          <Button className="bg-blue-500 text-white flex items-center gap-1"  onClick={handleOpenModal}>
+            <Plus className="w-4 h-4"  /> CREATE JOB POST
+            
           </Button>
-          <Input placeholder="Job Title" className="w-44" />
-          <Input type="date" placeholder="Job Post Date" className="w-44" />
-          <Button>SUBMIT</Button>
+          <CreateJobModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+          <Input placeholder="Job Title" className="w-full sm:w-44" />
+          <Input type="date" placeholder="Job Post Date" className="w-full sm:w-44" />
+          <Button className="bg-blue-500 text-white w-full sm:w-auto">SUBMIT</Button>
         </div>
       </div>
 
-      {/* -------------------------
-        MAIN GRID LAYOUT
-      ------------------------- */}
+      {/* GRID LAYOUT */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* -------------------------
-          LEFT SIDE
-        ------------------------- */}
+        {/* LEFT PANEL */}
         <div className="lg:col-span-2 space-y-4">
           {!selectedJob ? (
-            /* Show all job cards initially */
             jobPosts.map((job) => (
               <Card
                 key={job.id}
@@ -194,7 +196,7 @@ const Job = () => {
                 onClick={() => setSelectedJob(job)}
               >
                 <CardHeader>
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
                     <div>
                       <p className="text-sm text-gray-500">
                         Posted on {job.postedDate}
@@ -202,24 +204,21 @@ const Job = () => {
                       <CardTitle className="text-lg font-bold">
                         {job.title}
                       </CardTitle>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">
-                        Updated on {job.currentDate}
+                      <p className="text-xs text-blue-600 font-semibold mt-1">
+                        {job.applicants} Applicant{job.applicants > 1 ? "s" : ""}
                       </p>
-                      <div className="mt-1 text-2xl font-bold">
-                        {job.applicants}
-                      </div>
-                      <p className="text-sm">Applicants</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Edit3 className="w-5 h-5 text-orange-500 hover:text-orange-700 cursor-pointer" />
+                      <Share2 className="w-5 h-5 text-blue-500 hover:text-blue-700 cursor-pointer" />
                     </div>
                   </div>
                 </CardHeader>
               </Card>
             ))
           ) : (
-            /* Show applicants list for selected job */
             <Card className="bg-white shadow">
-              <CardHeader className="flex justify-between items-center">
+              <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <CardTitle className="text-lg font-bold">
                   Applicants for {selectedJob.title}
                 </CardTitle>
@@ -238,7 +237,7 @@ const Job = () => {
                 {selectedJob.candidates.map((candidate, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-start border-b pb-3 last:border-b-0"
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 last:border-b-0 gap-2"
                   >
                     <div>
                       <h4 className="font-semibold">{candidate.name}</h4>
@@ -248,7 +247,7 @@ const Job = () => {
                         Applied on {candidate.appliedDate}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="flex flex-col sm:items-end gap-2 text-right">
                       <Button
                         size="sm"
                         variant="outline"
@@ -267,14 +266,12 @@ const Job = () => {
           )}
         </div>
 
-        {/* -------------------------
-          RIGHT SIDE: CANDIDATE DETAILS
-        ------------------------- */}
-        <div>
+        {/* RIGHT PANEL */}
+        <div className="lg:col-span-1">
           {selectedCandidate ? (
             <Card>
               <CardHeader>
-                <div className="flex justify-between items-start">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
                     <CardTitle className="text-orange-500">
                       {selectedCandidate.name}
@@ -305,6 +302,7 @@ const Job = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
                 <div className="flex flex-col gap-2 mt-4">
                   {selectedCandidate.email && (
                     <div className="flex items-center gap-2 text-sm">
@@ -319,6 +317,7 @@ const Job = () => {
                     </div>
                   )}
                 </div>
+
                 <Button variant="outline" className="mt-4">
                   <Download className="w-4 h-4 mr-2" /> Get Resume
                 </Button>
@@ -326,45 +325,32 @@ const Job = () => {
 
               <CardContent>
                 <Tabs defaultValue="overview">
-                  <TabsList className="grid grid-cols-5 w-full">
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
-                    <TabsTrigger value="skills">Skills</TabsTrigger>
-                    <TabsTrigger value="education">Education</TabsTrigger>
-                    <TabsTrigger value="experience">Work Exp</TabsTrigger>
-                    <TabsTrigger value="appointment">Appointment</TabsTrigger>
+                  <TabsList className="flex gap-2 overflow-x-auto">
+                    {["overview","skills","education","experience","appointment"].map((tab) => (
+                      <TabsTrigger key={tab} value={tab} className="min-w-[110px] flex-1 text-center">
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                      </TabsTrigger>
+                    ))}
                   </TabsList>
 
-                  {/* Overview */}
                   <TabsContent value="overview" className="mt-4">
-                    <h4 className="font-semibold text-orange-500">
-                      {selectedCandidate.name}
-                    </h4>
+                    <h4 className="font-semibold text-orange-500">{selectedCandidate.name}</h4>
                     <p>{selectedCandidate.position}</p>
                     <Badge className="mt-1">APPLICANT</Badge>
-                    <p className="text-xs mt-1">
-                      Applied on {selectedCandidate.appliedDate}
-                    </p>
+                    <p className="text-xs mt-1">Applied on {selectedCandidate.appliedDate}</p>
                   </TabsContent>
 
-                  {/* Skills */}
                   <TabsContent value="skills" className="mt-4">
                     {selectedCandidate.skills?.length ? (
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-2 flex-wrap overflow-x-auto">
                         {selectedCandidate.skills.map((skill) => (
-                          <Badge key={skill} variant="outline">
-                            {skill}
-                          </Badge>
+                          <Badge key={skill} variant="outline">{skill}</Badge>
                         ))}
                       </div>
-                    ) : (
-                      <p className="text-gray-500 text-sm">
-                        No skills available.
-                      </p>
-                    )}
+                    ) : <p className="text-gray-500 text-sm">No skills available.</p>}
                   </TabsContent>
 
-                  {/* Education */}
-                  <TabsContent value="education" className="mt-4 space-y-3">
+                  <TabsContent value="education" className="mt-4 space-y-3 overflow-x-auto">
                     {educationHistory.map((edu, i) => (
                       <div key={i}>
                         <p className="font-medium">{edu.period}</p>
@@ -374,7 +360,6 @@ const Job = () => {
                     ))}
                   </TabsContent>
 
-                  {/* Experience */}
                   <TabsContent value="experience" className="mt-4 space-y-3">
                     {workExperience.map((work, i) => (
                       <div key={i}>
@@ -385,8 +370,7 @@ const Job = () => {
                     ))}
                   </TabsContent>
 
-                  {/* Appointment */}
-                  <TabsContent value="appointment" className="mt-4">
+                  <TabsContent value="appointment" className="mt-4 overflow-x-auto">
                     <Table>
                       <TableHeader>
                         <TableRow>

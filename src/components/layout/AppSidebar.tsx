@@ -62,7 +62,7 @@ const navigationItems = [
 ]
 
 export function AppSidebar() {
-  const { state } = useSidebar()
+  const { state, setState } = useSidebar() // ✅ setState added
   const location = useLocation()
   const currentPath = location.pathname
   const collapsed = state === "collapsed"
@@ -157,7 +157,12 @@ export function AppSidebar() {
                         </div>
                       ) : (
                         <SidebarMenuButton asChild>
-                          <NavLink to={item.url} end className={getNavCls}>
+                          <NavLink 
+                            to={item.url} 
+                            end 
+                            className={getNavCls}
+                            onClick={() => setState("collapsed")} // ✅ click pe collapse
+                          >
                             <item.icon className="h-5 w-5 flex-shrink-0" />
                             {!collapsed && <span className="truncate">{item.title}</span>}
                           </NavLink>
@@ -171,7 +176,11 @@ export function AppSidebar() {
                         {item.subItems.map((subItem) => (
                           <SidebarMenuItem key={subItem.title}>
                             <SidebarMenuButton asChild>
-                              <NavLink to={subItem.url} className={getSubmenuCls}>
+                              <NavLink 
+                                to={subItem.url} 
+                                className={getSubmenuCls}
+                                onClick={() => setState("collapsed")} // ✅ click pe collapse
+                              >
                                 <subItem.icon className="h-4 w-4 flex-shrink-0" />
                                 <span className="truncate">{subItem.title}</span>
                               </NavLink>
@@ -190,4 +199,5 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
+
 export default AppSidebar
