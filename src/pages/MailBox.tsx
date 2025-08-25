@@ -1,16 +1,13 @@
 import { FC, useState } from "react";
 import {
-  Star,
-  Paperclip,
   Send,
   FileText,
   Trash2,
-  Search,
   Menu,
   X,
   Reply,
   Forward,
-  Mail,   // ✅ imported Mail icon
+  Mail, // ✅ email icon
 } from "lucide-react";
 
 interface Mail {
@@ -50,7 +47,6 @@ const mockMails: Mail[] = [
     content:
       "John, let’s have a strategy meeting tomorrow at 10:00 AM in the main hall. Regards, Steve.",
   },
-  // Add more dummy mails
   ...Array.from({ length: 7 }, (_, i) => ({
     id: i + 4,
     sender: "User " + (i + 4),
@@ -65,6 +61,57 @@ const MailBox: FC = () => {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
+
+  // Reusable Sidebar Buttons
+  const SidebarButtons = () => (
+    <nav className="flex-1 p-2 space-y-2">
+      <button
+        onClick={() => {
+          setActiveTab("all");
+          setSelectedMail(null);
+          setSidebarOpen(false);
+        }}
+        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
+          activeTab === "all" ? "bg-blue-100" : "hover:bg-gray-100"
+        }`}
+      >
+        <Mail className="w-5 h-5" /> All Mail
+      </button>
+      <button
+        onClick={() => {
+          setActiveTab("send");
+          setSidebarOpen(false);
+        }}
+        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
+          activeTab === "send" ? "bg-blue-100" : "hover:bg-gray-100"
+        }`}
+      >
+        <Send className="w-5 h-5" /> Send Mail
+      </button>
+      <button
+        onClick={() => {
+          setActiveTab("drafts");
+          setSidebarOpen(false);
+        }}
+        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
+          activeTab === "drafts" ? "bg-blue-100" : "hover:bg-gray-100"
+        }`}
+      >
+        <FileText className="w-5 h-5" /> Drafts
+      </button>
+      <button
+        onClick={() => {
+          setActiveTab("trash");
+          setSidebarOpen(false);
+        }}
+        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
+          activeTab === "trash" ? "bg-blue-100" : "hover:bg-gray-100"
+        }`}
+      >
+        <Trash2 className="w-5 h-5" /> Trash
+      </button>
+    </nav>
+  );
 
   const renderContent = () => {
     if (activeTab === "all" && !selectedMail) {
@@ -142,7 +189,6 @@ const MailBox: FC = () => {
       );
     }
 
-    // Other tabs (Send, Drafts, etc.) untouched
     if (activeTab === "send") {
       return (
         <div className="flex-1 p-4 sm:p-6 bg-gray-50">
@@ -191,50 +237,36 @@ const MailBox: FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+      {/* Sidebar (Desktop) */}
       <aside className="hidden md:flex md:w-64 bg-white shadow-lg flex-col">
         <div className="p-4 font-bold text-lg border-b">Inbox</div>
-        <nav className="flex-1 p-2 space-y-2">
-          <button
-            onClick={() => {
-              setActiveTab("all");
-              setSelectedMail(null);
-            }}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
-              activeTab === "all" ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
-          >
-            <Mail className="w-5 h-5" /> All Mail   {/* ✅ changed to Mail */}
-          </button>
-          <button
-            onClick={() => setActiveTab("send")}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
-              activeTab === "send" ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
-          >
-            <Send className="w-5 h-5" /> Send Mail
-          </button>
-          <button
-            onClick={() => setActiveTab("drafts")}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
-              activeTab === "drafts" ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
-          >
-            <FileText className="w-5 h-5" /> Drafts
-          </button>
-          <button
-            onClick={() => setActiveTab("trash")}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg ${
-              activeTab === "trash" ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
-          >
-            <Trash2 className="w-5 h-5" /> Trash
-          </button>
-        </nav>
+        <SidebarButtons />
       </aside>
 
-      {/* Mobile Topbar */}
+      {/* Sidebar (Mobile Drawer) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-40"
+            onClick={() => setSidebarOpen(false)}
+          />
+          {/* Drawer */}
+          <aside className="relative z-50 w-64 bg-white shadow-lg flex flex-col">
+            <div className="p-4 font-bold text-lg border-b flex justify-between items-center">
+              Inbox
+              <button onClick={() => setSidebarOpen(false)}>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <SidebarButtons />
+          </aside>
+        </div>
+      )}
+
+      {/* Main Content */}
       <main className="flex-1 flex flex-col relative">
+        {/* Mobile Topbar */}
         <div className="md:hidden p-2 bg-white border-b flex items-center">
           <button onClick={() => setSidebarOpen(true)}>
             <Menu className="w-6 h-6" />

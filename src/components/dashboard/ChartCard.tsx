@@ -16,25 +16,28 @@ interface ChartCardProps {
 
 export function ChartCard({ title, data, className }: ChartCardProps) {
   return (
-    <Card className={cn(
-      "shadow-card hover:shadow-hover transition-smooth",
-      className
-    )}>
+    <Card
+      className={cn(
+        "shadow-card hover:shadow-hover transition-smooth",
+        className
+      )}
+    >
       <CardHeader>
         <CardTitle className="text-lg font-bold text-card-foreground">
           {title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-64 w-full">
+        {/* Chart container with safe padding */}
+        <div className="flex items-center justify-center w-full h-64 p-4">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
+            <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={100}
+                innerRadius="50%"
+                outerRadius="101%"
                 paddingAngle={2}
                 dataKey="value"
               >
@@ -45,13 +48,17 @@ export function ChartCard({ title, data, className }: ChartCardProps) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        
+
+        {/* Legends */}
         <div className="mt-4 space-y-2">
           {data.map((item, index) => (
-            <div key={index} className="flex items-center justify-between text-sm">
+            <div
+              key={index}
+              className="flex items-center justify-between text-sm"
+            >
               <div className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
+                <div
+                  className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
                 <span className="text-muted-foreground">{item.name}</span>
