@@ -1,0 +1,29 @@
+.custom-calendar {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 1.3rem; /* bigger font for days */
+}
+
+/* Each date box (tile) size */
+.custom-calendar .react-calendar__tile {
+  padding: 2rem; /* increase box size */
+  font-size: 1.4rem; /* bigger numbers */
+  border-radius: 10px;
+  transition: all 0.2s;
+  text-align: center;
+  border: 1px solid #d1d5db;
+}
+
+/* Active date */
+.custom-calendar .react-calendar__tile--active {
+  background: #3b82f6;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Hover effect */
+.custom-calendar .react-calendar__tile:hover {
+  background: #e0f2fe;
+  border-radius: 10px;
+}

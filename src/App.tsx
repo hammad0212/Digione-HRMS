@@ -4,12 +4,19 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import PayrollTypeSetup from "./pages/PayrollTypeSetup";
+import PayrollTypeSetup from "./pages/PayRoll/PayrollTypeSetup";
 import NotFound from "./pages/NotFound";
 import Job from "./pages/recruitment/Job";
 import Candidate from "./pages/recruitment/Candidate";
 import Termination from "./pages/recruitment/Termination";
 import Layout from "./components/layout/Layout";
+import Course from "./pages/Course";
+import Template_Master from "./pages/Template_Master";
+import EmpPaySetup from "./pages/PayRoll/Emppaysetup"
+import PayrollSetup from "./pages/PayRoll/Payrollsetup";
+import Cpf_Levy from "./pages/PayRoll/Cpf_Levy";
+import Booking from "./pages/Booking/Booking";
+import MailBox from "./pages/MailBox";
 
 const queryClient = new QueryClient();
 
@@ -28,14 +35,7 @@ function App() {
                 </Layout>
               }
             />
-            <Route
-              path="/payroll"
-              element={
-                <Layout>
-                  <PayrollTypeSetup />
-                </Layout>
-              }
-            />
+            
             <Route
               path="/recruitment/job"
               element={
@@ -57,6 +57,70 @@ function App() {
               element={
                 <Layout>
                   <Termination />
+                </Layout>
+              }
+            />
+             <Route
+              path="/courses"
+              element={
+                <Layout>
+                  <Course />
+                </Layout>
+              }
+            />
+            <Route
+              path="/templates"
+              element={
+                <Layout>
+                  <Template_Master />
+                </Layout>
+              }
+            />
+            <Route
+              path="/payroll/payrolltypesetup"
+              element={
+                <Layout>
+                  <PayrollTypeSetup />
+                </Layout>
+              }
+            />
+            <Route
+              path="/payroll/payrollsetup"
+              element={
+                <Layout>
+                  <PayrollSetup />
+                </Layout>
+              }
+            />
+            <Route
+              path="/payroll/emppaysetup"
+              element={
+                <Layout>
+                  < EmpPaySetup/>
+                </Layout>
+              }
+            />
+            <Route
+              path="/payroll/cpf/levy"
+              element={
+                <Layout>
+                  < Cpf_Levy/>
+                </Layout>
+              }
+            />
+            <Route
+              path="/booking"
+              element={
+                <Layout>
+                  < Booking/>
+                </Layout>
+              }
+            />
+            <Route
+              path="/mailbox"
+              element={
+                <Layout>
+                  < MailBox/>
                 </Layout>
               }
             />
